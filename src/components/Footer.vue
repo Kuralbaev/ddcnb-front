@@ -9,11 +9,11 @@
         </p>
       </div>
       <nav class="footer__nav" aria-label="Навигация в подвале">
-        <nuxt-link to="/services">Услуги</nuxt-link>
-        <nuxt-link to="/about">О нас</nuxt-link>
-        <nuxt-link to="/mission">Миссия</nuxt-link>
-        <nuxt-link to="/news">Новости</nuxt-link>
-        <nuxt-link to="/contacts">Контакты</nuxt-link>
+        <router-link to="/services">Услуги</router-link>
+        <router-link to="/about">О нас</router-link>
+        <router-link to="/mission">Миссия</router-link>
+        <router-link to="/news">Новости</router-link>
+        <router-link to="/contacts">Контакты</router-link>
       </nav>
       <div class="footer__meta">
         <p>© 1996–2026 DDC. Все права защищены.</p>

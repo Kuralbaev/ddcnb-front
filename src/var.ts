@@ -5,4 +5,4 @@ export const roles = {
   deputyChairman: "Председатель",
 };
 
-export const BASE_URL = "http://192.168.242.139:1337";
+export const BASE_URL = import.meta.env.VITE_API_URL;

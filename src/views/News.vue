@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { initDDC } from "../assets/main";
 import { useNewsStore } from "../stores/news";
 import { storeToRefs } from "pinia";
 import { formatDate } from "@/helpers/formatDate";
@@ -69,7 +68,6 @@ const showEllipsisBefore = (page: number, index: number) => {
 onMounted(() => {
   newsStore.fetchCategories();
   loadNews();
-  initDDC();
 });
 </script>
 

@@ -184,7 +184,6 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { initDDC } from "../assets/main";
 import { api } from "@/api";
 import type { FeedbackPayload } from "@/dto/feedback";
 import { formatKzPhone, isKzPhoneComplete } from "@/helpers/phoneMask";
@@ -261,7 +260,6 @@ const handleSubmit = async () => {
 };
 
 onMounted(() => {
-  initDDC();
   initReveal();
 });
 </script>

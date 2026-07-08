@@ -262,7 +262,6 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { initDDC } from "../assets/main";
 
 const initReveal = () => {
   const revealObserver = new IntersectionObserver(
@@ -285,7 +284,6 @@ const initReveal = () => {
 };
 
 onMounted(() => {
-  initDDC();
   initReveal();
 });
 </script>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { initDDC } from "../assets/main";
 import { useNewsStore } from "@/stores/news";
 import { storeToRefs } from "pinia";
 import { formatDate } from "@/helpers/formatDate";
@@ -26,6 +25,49 @@ const initReveal = () => {
       .querySelectorAll(".reveal")
       .forEach((el) => revealObserver.observe(el));
   });
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  /* ---------- Счётчики ---------- */
+  function animateCount(el) {
+    const target = parseInt(el.dataset.count, 10);
+    const duration = 1600;
+    const start = performance.now();
+    const isPlain = el.dataset.plain === "true";
+
+    function frame(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const value = Math.round(target * eased);
+      el.textContent = isPlain ? String(value) : value.toLocaleString("ru-RU");
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const countObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const counters = entry.target.querySelectorAll("[data-count]");
+        const selfCount = entry.target.dataset.count ? [entry.target] : [];
+        [...selfCount, ...counters].forEach((el) => {
+          if (reducedMotion) {
+            el.textContent = el.dataset.count;
+          } else {
+            animateCount(el);
+          }
+        });
+        countObserver.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.4 },
+  );
+  document
+    .querySelectorAll(".number__value")
+    .forEach((el) => countObserver.observe(el));
 };
 
 /* ---------- Утилита: ретина-canvas ---------- */

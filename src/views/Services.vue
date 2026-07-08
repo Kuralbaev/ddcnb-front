@@ -525,7 +525,6 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { initDDC } from "../assets/main";
 
 const initReveal = () => {
   const revealObserver = new IntersectionObserver(
@@ -545,10 +544,44 @@ const initReveal = () => {
       .querySelectorAll(".reveal")
       .forEach((el) => revealObserver.observe(el));
   });
+
+  /* ---------- Вкладки услуг ---------- */
+  const svcTabs = document.querySelectorAll(".svc-tab");
+  if (svcTabs.length) {
+    svcTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        svcTabs.forEach((t) => {
+          t.classList.remove("is-active");
+          t.setAttribute("aria-selected", "false");
+        });
+        document.querySelectorAll(".svc-panel").forEach((p) => {
+          p.classList.remove("is-active");
+          p.hidden = true;
+        });
+
+        tab.classList.add("is-active");
+        tab.setAttribute("aria-selected", "true");
+        const panel = document.getElementById(
+          tab.getAttribute("aria-controls"),
+        );
+        panel.hidden = false;
+        // перезапуск анимации появления панели
+        panel.classList.remove("is-active");
+        void panel.offsetWidth;
+        panel.classList.add("is-active");
+      });
+    });
+
+    // открытие вкладки по хэшу: services.html#svc-2
+    const hashMatch = location.hash.match(/^#svc-(\d)$/);
+    if (hashMatch) {
+      const tab = document.getElementById("svc-tab-" + hashMatch[1]);
+      if (tab) tab.click();
+    }
+  }
 };
 
 onMounted(() => {
-  initDDC();
   initReveal();
 });
 </script>

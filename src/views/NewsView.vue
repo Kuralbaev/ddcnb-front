@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import { initDDC } from "../assets/main";
 import { useNewsStore } from "../stores/news";
 import { storeToRefs } from "pinia";
 import { formatDate } from "@/helpers/formatDate";
@@ -36,7 +35,6 @@ const initReveal = () => {
 
 onMounted(() => {
   newsStore.fetchNewsById(route.params.id as string);
-  initDDC();
   initReveal();
 });
 </script>

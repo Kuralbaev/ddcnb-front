@@ -65,3 +65,26 @@
     </div>
   </header>
 </template>
+
+<script setup lang="ts">
+import { onMounted } from "vue";
+
+onMounted(() => {
+  /* ---------- Мобильное меню ---------- */
+  const topbar = document.querySelector(".topbar");
+  const burger = document.querySelector(".burger");
+  if (burger && topbar) {
+    burger.addEventListener("click", () => {
+      const open = topbar.classList.toggle("is-open");
+      burger.setAttribute("aria-expanded", String(open));
+    });
+    document
+      .querySelectorAll(".nav__link")
+      .forEach((link) =>
+        link.addEventListener("click", () =>
+          topbar.classList.remove("is-open"),
+        ),
+      );
+  }
+});
+</script>

@@ -341,7 +341,6 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from "vue";
-import { initDDC } from "../assets/main";
 import type { Team } from "@/dto/team";
 import { api } from "@/api";
 import { BASE_URL, roles } from "@/var";
@@ -392,7 +391,6 @@ const initReveal = () => {
 
 onMounted(() => {
   fetchTeams();
-  initDDC();
   initReveal();
 });
 </script>

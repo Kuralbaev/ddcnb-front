@@ -8,7 +8,7 @@ import NewsList from '../views/News.vue'
 import NewsDetail from '../views/NewsView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 }
   },

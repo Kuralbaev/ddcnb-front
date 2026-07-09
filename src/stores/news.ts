@@ -6,6 +6,8 @@ import type { NewsArticle, NewsCategory } from '../dto/news'
 export const useNewsStore = defineStore('news', () => {
   const news = ref<NewsArticle[]>([])
   const currentNews = ref<NewsArticle | null>(null)
+  const isLoadingCurrentNews = ref(false)
+  const isLoadingNews = ref(false)
   const categories = ref<NewsCategory[]>([])
   const pagination = ref({
     page: 1,
@@ -15,20 +17,30 @@ export const useNewsStore = defineStore('news', () => {
   })
 
   const fetchNews = async (categoryId = 'all') => {
-    const params: Record<string, string | number> = {
-      'pagination[page]': pagination.value.page,
-      'pagination[pageSize]': pagination.value.pageSize,
+    isLoadingNews.value = true
+
+    try {
+      const params: Record<string, string | number> = {
+        'pagination[page]': pagination.value.page,
+        'pagination[pageSize]': pagination.value.pageSize,
+      }
+
+      const url =
+        categoryId === 'all'
+          ? '/news?populate=*&sort[publishedAt]=desc'
+          : `/news?filters[category][id][$eq]=${categoryId}&populate=*&sort[publishedAt]=desc`
+
+      const response = await api.get(url, { params })
+      news.value = response.data.data
+      pagination.value.total = response.data.meta.pagination.total
+      pagination.value.totalPages = response.data.meta.pagination.pageCount
+    } catch {
+      news.value = []
+      pagination.value.total = 0
+      pagination.value.totalPages = 0
+    } finally {
+      isLoadingNews.value = false
     }
-
-    const url =
-      categoryId === 'all'
-        ? '/news?populate=*&sort[publishedAt]=desc'
-        : `/news?filters[category][id][$eq]=${categoryId}&populate=*&sort[publishedAt]=desc`
-
-    const response = await api.get(url, { params })
-    news.value = response.data.data
-    pagination.value.total = response.data.meta.pagination.total
-    pagination.value.totalPages = response.data.meta.pagination.pageCount
   }
 
   const fetchNewsByCategory = async (categoryId: string) => {
@@ -45,8 +57,17 @@ export const useNewsStore = defineStore('news', () => {
   }
 
   const fetchNewsById = async (documentId: string) => {
-    const response = await api.get(`/news/${documentId}?populate=*`)
-    currentNews.value = response.data.data
+    isLoadingCurrentNews.value = true
+    currentNews.value = null
+
+    try {
+      const response = await api.get(`/news/${documentId}?populate=*`)
+      currentNews.value = response.data.data
+    } catch {
+      currentNews.value = null
+    } finally {
+      isLoadingCurrentNews.value = false
+    }
   }
 
   const fetchCategories = async () => {
@@ -62,6 +83,8 @@ export const useNewsStore = defineStore('news', () => {
   return {
     news,
     currentNews,
+    isLoadingCurrentNews,
+    isLoadingNews,
     categories,
     pagination,
     fetchNews,

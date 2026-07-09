@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from "vue";
+import { onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useNewsStore } from "../stores/news";
 import { storeToRefs } from "pinia";
@@ -9,9 +9,7 @@ import { BASE_URL } from "@/var";
 const route = useRoute();
 
 const newsStore = useNewsStore();
-const { currentNews } = storeToRefs(newsStore);
-
-const article = computed(() => currentNews.value);
+const { currentNews, isLoadingCurrentNews } = storeToRefs(newsStore);
 
 const initReveal = () => {
   const revealObserver = new IntersectionObserver(
@@ -33,14 +31,39 @@ const initReveal = () => {
   });
 };
 
-onMounted(() => {
-  newsStore.fetchNewsById(route.params.id as string);
+const loadNews = async (id: string) => {
+  await newsStore.fetchNewsById(id);
   initReveal();
+};
+
+onMounted(() => {
+  loadNews(route.params.id as string);
 });
+
+watch(
+  () => route.params.id,
+  (id) => {
+    if (typeof id === "string") loadNews(id);
+  },
+);
 </script>
 
 <template>
-  <main v-if="currentNews">
+  <main v-if="isLoadingCurrentNews" class="news-article news-article--loading">
+    <div class="container">
+      <div
+        class="news-loader"
+        role="status"
+        aria-live="polite"
+        aria-label="Загрузка новости"
+      >
+        <span class="news-loader__spinner" aria-hidden="true"></span>
+        <p class="news-loader__text">Загрузка новости…</p>
+      </div>
+    </div>
+  </main>
+
+  <main v-else-if="currentNews">
     <section class="hero hero--page">
       <div class="container">
         <div class="frame">
@@ -228,6 +251,45 @@ onMounted(() => {
 
 .news-article--empty {
   padding: clamp(80px, 12vh, 160px) 0;
+}
+
+.news-article--loading {
+  padding: clamp(120px, 18vh, 220px) 0;
+}
+
+.news-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 320px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  backdrop-filter: blur(6px);
+  padding: clamp(48px, 8vh, 96px) var(--pad);
+}
+
+.news-loader__spinner {
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: news-loader-spin 0.8s linear infinite;
+}
+
+.news-loader__text {
+  font: 600 12px var(--font-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@keyframes news-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 900px) {

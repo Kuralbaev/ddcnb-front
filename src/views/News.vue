@@ -7,7 +7,7 @@ import { formatDate } from "@/helpers/formatDate";
 const activeFilter = ref("all");
 
 const newsStore = useNewsStore();
-const { news, categories, pagination } = storeToRefs(newsStore);
+const { news, categories, pagination, isLoadingNews } = storeToRefs(newsStore);
 
 const visiblePages = computed(() => {
   const { page, totalPages } = pagination.value;
@@ -128,7 +128,18 @@ onMounted(() => {
             {{ filter.name_ru }}
           </button>
         </div>
-        <div class="news__list">
+        <div
+          v-if="isLoadingNews"
+          class="news-loader"
+          role="status"
+          aria-live="polite"
+          aria-label="Загрузка новостей"
+        >
+          <span class="news-loader__spinner" aria-hidden="true"></span>
+          <p class="news-loader__text">Загрузка новостей…</p>
+        </div>
+
+        <div v-else class="news__list">
           <RouterLink
             v-for="(item, index) in news"
             :key="item.documentId"
@@ -145,7 +156,7 @@ onMounted(() => {
         </div>
 
         <nav
-          v-if="pagination.totalPages > 1"
+          v-if="!isLoadingNews && pagination.totalPages > 1"
           class="news-pagination reveal"
           aria-label="Пагинация новостей"
         >
@@ -189,7 +200,10 @@ onMounted(() => {
           </button>
         </nav>
 
-        <p v-if="!news.length" class="news-page__empty reveal">
+        <p
+          v-if="!isLoadingNews && !news.length"
+          class="news-page__empty reveal"
+        >
           В этой категории пока нет публикаций.
         </p>
       </div>
@@ -251,6 +265,42 @@ onMounted(() => {
   text-transform: uppercase;
   color: var(--ink-faint);
   text-align: center;
+}
+
+.news-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 280px;
+  border: 1px solid var(--line);
+  border-top: 1px solid var(--line-strong);
+  background: var(--surface);
+  backdrop-filter: blur(6px);
+  padding: clamp(48px, 8vh, 96px) var(--pad);
+}
+
+.news-loader__spinner {
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: news-loader-spin 0.8s linear infinite;
+}
+
+.news-loader__text {
+  font: 600 12px var(--font-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@keyframes news-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .news-pagination {

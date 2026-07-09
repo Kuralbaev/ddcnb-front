@@ -6,6 +6,7 @@ import MissionView from '../views/Mission.vue'
 import ContactView from '../views/Contact.vue'
 import NewsList from '../views/News.vue'
 import NewsDetail from '../views/NewsView.vue'
+import NotFoundView from '../views/NotFound.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -47,6 +48,11 @@ const router = createRouter({
       path: '/news/:id',
       name: 'news-detail',
       component: NewsDetail,
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFoundView,
     },
   ],
 })

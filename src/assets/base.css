@@ -9,15 +9,6 @@
    ========================================================= */
 
    :root {
-    --ink: #16203a;
-    --ink-soft: #4b566e;
-    --ink-faint: #8b94aa;
-    --line: rgba(22, 32, 58, 0.14);
-    --line-strong: rgba(22, 32, 58, 0.32);
-    --bg: #f3f5fa;
-    --surface: rgba(255, 255, 255, 0.72);
-    --accent: #2547e0;
-    --accent-soft: #9db8e8;
     --radius: 2px;
     --container: 1280px;
     --pad: clamp(20px, 4vw, 56px);
@@ -36,9 +27,9 @@
     font-family: var(--font-body);
     color: var(--ink);
     background:
-      radial-gradient(1100px 700px at 85% -5%, rgba(157, 184, 232, 0.55), transparent 60%),
-      radial-gradient(900px 700px at -10% 40%, rgba(190, 206, 236, 0.5), transparent 55%),
-      radial-gradient(1000px 800px at 60% 105%, rgba(166, 190, 234, 0.45), transparent 60%),
+      radial-gradient(1100px 700px at 85% -5%, var(--bg-glow-1), transparent 60%),
+      radial-gradient(900px 700px at -10% 40%, var(--bg-glow-2), transparent 55%),
+      radial-gradient(1000px 800px at 60% 105%, var(--bg-glow-3), transparent 60%),
       var(--bg);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
@@ -81,7 +72,7 @@
   .blueprint__line {
     width: 1px;
     height: 100%;
-    background: linear-gradient(var(--line), rgba(22, 32, 58, 0.05));
+    background: linear-gradient(var(--line), var(--line-faint));
   }
   
   /* ===== Шапка ===== */
@@ -90,7 +81,7 @@
     top: 0;
     z-index: 50;
     backdrop-filter: blur(14px);
-    background: rgba(243, 245, 250, 0.65);
+    background: var(--topbar-bg);
     border-bottom: 1px solid var(--line);
   }
   .topbar__inner {
@@ -179,7 +170,7 @@
     position: relative;
     background: var(--surface);
     border: 1px solid var(--line);
-    box-shadow: 0 30px 80px -40px rgba(22, 32, 58, 0.25);
+    box-shadow: 0 30px 80px -40px var(--shadow-color);
     backdrop-filter: blur(6px);
   }
   .frame__rulers {
@@ -282,7 +273,7 @@
     border-radius: 50%;
     border: 1px solid var(--accent-soft);
     background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 0 6px rgba(157, 184, 232, 0.25);
+    box-shadow: 0 0 0 6px var(--glow-ring);
   }
   .orbit__node::after {
     content: "";
@@ -302,7 +293,7 @@
     place-items: center;
     border-radius: 50%;
     background: var(--ink);
-    color: #cfe0f8;
+    color: var(--highlight);
     animation: pulse 3.2s ease-in-out infinite;
   }
   .orbit__core svg { width: 28px; height: 28px; }
@@ -447,7 +438,7 @@
     aspect-ratio: 1;
     border-radius: 50%;
     overflow: hidden;
-    background: radial-gradient(circle at 40% 35%, #0d1830, #050a18 75%);
+    background: var(--neuro-bg);
     box-shadow:
       0 0 0 1px var(--line),
       0 40px 90px -30px rgba(22, 32, 58, 0.55);
@@ -543,7 +534,7 @@
   .cta__phone b { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
   
   /* ===== Футер ===== */
-  .footer { border-top: 1px solid var(--line); position: relative; z-index: 1; background: rgba(243, 245, 250, 0.7); }
+  .footer { border-top: 1px solid var(--line); position: relative; z-index: 1; background: var(--footer-bg); }
   .footer__inner {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -677,7 +668,7 @@
     border-radius: 50%;
     background: #fff;
     border: 1px solid var(--accent);
-    box-shadow: 0 0 0 6px rgba(157, 184, 232, 0.28);
+    box-shadow: 0 0 0 6px var(--glow-ring);
     z-index: 1;
   }
   .timeline__item:nth-child(odd) .timeline__dot { left: calc(100% + var(--tl-gap) - 7px); }
@@ -782,8 +773,8 @@
     overflow: hidden;
     border-bottom: 1px solid var(--line);
     background:
-      radial-gradient(120% 100% at 50% 110%, rgba(157, 184, 232, 0.55), transparent 60%),
-      linear-gradient(160deg, #f8fafd 0%, #e8eef9 100%);
+      radial-gradient(120% 100% at 50% 110%, var(--panel-glow), transparent 60%),
+      var(--panel-gradient);
   }
   .person-card__media::before {
     content: "";
@@ -928,7 +919,7 @@
     overflow: hidden;
     padding: clamp(22px, 2.6vw, 36px);
     background: var(--ink);
-    color: #cfe0f8;
+    color: var(--highlight);
     border: 1px solid var(--ink);
   }
   .people__tile-rings {
@@ -955,14 +946,14 @@
     line-height: 0.9;
     letter-spacing: -0.02em;
     color: transparent;
-    -webkit-text-stroke: 1.5px #cfe0f8;
+    -webkit-text-stroke: 1.5px var(--highlight);
   }
   .people__tile-text {
     font-size: 12px;
     line-height: 1.65;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: rgba(207, 224, 248, 0.75);
+    color: var(--highlight-soft);
     max-width: 240px;
   }
   
@@ -970,8 +961,8 @@
   .person-card--lead { border-color: var(--line-strong); }
   .person-card--lead .person-card__media {
     background:
-      radial-gradient(120% 100% at 50% 110%, rgba(37, 71, 224, 0.28), transparent 65%),
-      linear-gradient(160deg, #10182e 0%, #1d2a4d 100%);
+      radial-gradient(120% 100% at 50% 110%, var(--card-dark-glow), transparent 65%),
+      var(--card-dark-gradient);
   }
   .person-card--lead .person-card__media::before {
     background-image:
@@ -981,9 +972,9 @@
   .person-card--lead .person-card__rings { border-color: rgba(173, 199, 240, 0.4); }
   .person-card--lead .person-card__rings::before { border-color: rgba(173, 199, 240, 0.22); }
   .person-card--lead .person-card__rings::after { border-color: rgba(173, 199, 240, 0.3); }
-  .person-card--lead .person-card__mono { -webkit-text-stroke-color: #cfe0f8; }
-  .person-card--lead:hover .person-card__mono { color: #cfe0f8; }
-  .person-card--lead .person-card__num { color: rgba(207, 224, 248, 0.6); }
+  .person-card--lead .person-card__mono { -webkit-text-stroke-color: var(--highlight); }
+  .person-card--lead:hover .person-card__mono { color: var(--highlight); }
+  .person-card--lead .person-card__num { color: var(--highlight-faint); }
   .person-card--lead .person-card__badge { background: var(--accent); }
   
   /* аватар в цитате председателя */
@@ -993,14 +984,14 @@
     width: 64px; height: 64px;
     border-radius: 50%;
     border: 1px solid var(--line-strong);
-    background: linear-gradient(140deg, rgba(157, 184, 232, 0.35), rgba(255, 255, 255, 0.8));
+    background: var(--card-light-gradient);
     font: 600 16px var(--font-display);
     letter-spacing: 0.06em;
     color: var(--ink);
   }
   .person__avatar--dark {
     background: var(--ink);
-    color: #cfe0f8;
+    color: var(--highlight);
     border-color: var(--ink);
   }
   
@@ -1129,8 +1120,8 @@
     border-color: var(--ink);
   }
   .svc-tab.is-active .svc-tab__name { color: #fff; }
-  .svc-tab.is-active .svc-tab__num { color: rgba(207, 224, 248, 0.7); }
-  .svc-tab.is-active .svc-tab__arrow { color: #cfe0f8; transform: translateX(4px); }
+  .svc-tab.is-active .svc-tab__num { color: var(--highlight-soft); }
+  .svc-tab.is-active .svc-tab__arrow { color: var(--highlight); transform: translateX(4px); }
   
   .svc__tabs-note {
     margin-top: 18px;
@@ -1346,7 +1337,7 @@
     position: relative;
     overflow: hidden;
     background: var(--ink);
-    color: #cfe0f8;
+    color: var(--highlight);
     padding: clamp(26px, 3.4vw, 48px);
     display: flex;
     flex-direction: column;
@@ -1358,7 +1349,7 @@
     font: 600 10px var(--font-display);
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(207, 224, 248, 0.65);
+    color: var(--highlight-muted);
   }
   .compliance__contact-phone {
     font-family: var(--font-display);
@@ -1371,15 +1362,15 @@
     font: 500 12px var(--font-display);
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(207, 224, 248, 0.75);
+    color: var(--highlight-soft);
   }
   .compliance__contact-note {
     margin-top: 12px;
     padding-top: 16px;
-    border-top: 1px solid rgba(207, 224, 248, 0.2);
+    border-top: 1px solid var(--highlight-border);
     font-size: 12px;
     line-height: 1.7;
-    color: rgba(207, 224, 248, 0.75);
+    color: var(--highlight-soft);
   }
   
   .compliance__docs {
@@ -1552,7 +1543,7 @@
     margin-top: 20px;
     padding: 16px 20px;
     border-left: 3px solid var(--accent);
-    background: rgba(157, 184, 232, 0.18);
+    background: var(--success-bg);
     font-size: 13px;
     line-height: 1.6;
     color: var(--ink);

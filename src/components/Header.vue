@@ -49,6 +49,28 @@
           >Портал закупок ↗
         </RouterLink>
       </nav>
+      <div class="theme" role="group" aria-label="Тема оформления">
+        <button
+          class="theme__btn"
+          type="button"
+          :class="{ 'is-active': theme === 'default' }"
+          :aria-pressed="theme === 'default'"
+          title="Текущая тема"
+          @click="setTheme('default')"
+        >
+          <span class="theme__swatch theme__swatch--default" aria-hidden="true"></span>
+        </button>
+        <button
+          class="theme__btn"
+          type="button"
+          :class="{ 'is-active': theme === 'brand' }"
+          :aria-pressed="theme === 'brand'"
+          title="Бренд"
+          @click="setTheme('brand')"
+        >
+          <span class="theme__swatch theme__swatch--brand" aria-hidden="true"></span>
+        </button>
+      </div>
       <div class="lang">
         <button class="lang__btn is-active" type="button">Ru</button>
         <button class="lang__btn" type="button">Kz</button>
@@ -68,6 +90,15 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useThemeStore, type AppTheme } from "@/stores/theme";
+
+const themeStore = useThemeStore();
+const { theme } = storeToRefs(themeStore);
+
+const setTheme = (next: AppTheme) => {
+  themeStore.setTheme(next);
+};
 
 onMounted(() => {
   /* ---------- Мобильное меню ---------- */
@@ -88,3 +119,46 @@ onMounted(() => {
   }
 });
 </script>
+
+<style scoped>
+.theme {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.theme__btn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.theme__btn:hover,
+.theme__btn.is-active {
+  border-color: var(--line-strong);
+}
+
+.theme__btn.is-active {
+  transform: translateY(-1px);
+}
+
+.theme__swatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--line-strong);
+}
+
+.theme__swatch--default {
+  background: linear-gradient(135deg, #2547e0 50%, #9db8e8 50%);
+}
+
+.theme__swatch--brand {
+  background: #01471c;
+}
+</style>

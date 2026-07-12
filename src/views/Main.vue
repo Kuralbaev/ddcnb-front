@@ -71,6 +71,10 @@ const initReveal = () => {
 };
 
 /* ---------- Утилита: ретина-canvas ---------- */
+function getCanvasRgb(name: string) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
 function setupCanvas(canvas: any) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const rect = canvas.getBoundingClientRect();
@@ -108,7 +112,8 @@ function initHeroCanvas() {
           dy = a.y - b.y;
         const dist = Math.hypot(dx, dy);
         if (dist < LINK) {
-          ctx.strokeStyle = `rgba(60, 86, 160, ${0.16 * (1 - dist / LINK)})`;
+          const line = getCanvasRgb("--canvas-line");
+          ctx.strokeStyle = `rgba(${line}, ${0.16 * (1 - dist / LINK)})`;
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
@@ -123,7 +128,7 @@ function initHeroCanvas() {
       n.y += n.vy;
       if (n.x < 0 || n.x > w) n.vx *= -1;
       if (n.y < 0 || n.y > h) n.vy *= -1;
-      ctx.fillStyle = "rgba(37, 71, 224, 0.55)";
+      ctx.fillStyle = `rgba(${getCanvasRgb("--canvas-node")}, 0.55)`;
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
       ctx.fill();
@@ -180,7 +185,8 @@ function initNeuroCanvas() {
         const max = R() * 0.62;
         if (dist < max) {
           const alpha = 0.34 * (1 - dist / max);
-          ctx.strokeStyle = `rgba(96, 156, 255, ${alpha})`;
+          const neuroLine = getCanvasRgb("--canvas-neuro-line");
+          ctx.strokeStyle = `rgba(${neuroLine}, ${alpha})`;
           ctx.lineWidth = 0.8;
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
@@ -198,15 +204,18 @@ function initNeuroCanvas() {
       const p = pos(n);
       const glow = 0.55 + 0.45 * Math.sin(time / 800 + n.phase);
 
+      const neuroGlow = getCanvasRgb("--canvas-neuro-glow");
+      const neuroNode = getCanvasRgb("--canvas-neuro-node");
+
       const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, n.size * 7);
-      g.addColorStop(0, `rgba(140, 190, 255, ${0.5 * glow})`);
-      g.addColorStop(1, "rgba(140, 190, 255, 0)");
+      g.addColorStop(0, `rgba(${neuroGlow}, ${0.5 * glow})`);
+      g.addColorStop(1, `rgba(${neuroGlow}, 0)`);
       ctx.fillStyle = g;
       ctx.beginPath();
       ctx.arc(p.x, p.y, n.size * 7, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = `rgba(210, 230, 255, ${0.5 + 0.5 * glow})`;
+      ctx.fillStyle = `rgba(${neuroNode}, ${0.5 + 0.5 * glow})`;
       ctx.beginPath();
       ctx.arc(p.x, p.y, n.size, 0, Math.PI * 2);
       ctx.fill();

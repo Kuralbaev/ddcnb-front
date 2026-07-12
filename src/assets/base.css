@@ -1586,6 +1586,11 @@
   }
   
   @media (max-width: 760px) {
+    .hero__visual { display: none; }
+    .footer__nav{
+      gap: 20px;
+    }
+
     .nav, .lang { display: none; }
     .burger { display: block; margin-left: auto; }
     .topbar.is-open .nav {

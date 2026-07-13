@@ -53,7 +53,7 @@
   --line: rgba(1, 71, 28, 0.14);
   --line-strong: rgba(1, 71, 28, 0.32);
   --line-faint: rgba(1, 71, 28, 0.05);
-  --bg: #f2f6f3;
+  --bg: #fff;
   --surface: rgba(255, 255, 255, 0.76);
   --accent: #01471c;
   --accent-soft: #5a9e72;
@@ -63,9 +63,9 @@
   --highlight-muted: rgba(184, 220, 196, 0.65);
   --highlight-border: rgba(184, 220, 196, 0.2);
 
-  --bg-glow-1: rgba(90, 158, 114, 0.5);
-  --bg-glow-2: rgba(125, 184, 145, 0.45);
-  --bg-glow-3: rgba(109, 172, 130, 0.4);
+  --bg-glow-1: #fff;
+  --bg-glow-2: #fff;
+  --bg-glow-3: #fff;
   --topbar-bg: rgba(242, 246, 243, 0.7);
   --footer-bg: rgba(242, 246, 243, 0.75);
   --shadow-color: rgba(1, 71, 28, 0.2);
